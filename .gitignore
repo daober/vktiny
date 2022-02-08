@@ -1,0 +1,11 @@
+build/*
+*.zip
+*.tar
+external/gli-master/data/*.dds
+external/gli-master/data/*.ktx
+*.html
+TODO.md
+.vscode
+.DS_Store
+assets/.DS_Store
+*.ipch

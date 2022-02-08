@@ -1,0 +1,117 @@
+{
+  "Total": {
+    "Blocks": 2, 
+    "Allocations": 5, 
+    "UnusedRanges": 2, 
+    "UsedBytes": 3933184, 
+    "UnusedBytes": 63175680, 
+    "AllocationSize": {"Min": 256, "Avg": 786637, "Max": 3932160}, 
+    "UnusedRangeSize": {"Min": 29622272, "Avg": 31587840, "Max": 33553408}
+  }, 
+  "Heap 0": {
+    "Size": 8471445504, 
+    "Flags": ["DEVICE_LOCAL"], 
+    "Stats": {
+      "Blocks": 1, 
+      "Allocations": 1, 
+      "UnusedRanges": 1, 
+      "UsedBytes": 3932160, 
+      "UnusedBytes": 29622272
+    }, 
+    "Type 7": {
+      "Flags": ["DEVICE_LOCAL"], 
+      "Stats": {
+        "Blocks": 1, 
+        "Allocations": 1, 
+        "UnusedRanges": 1, 
+        "UsedBytes": 3932160, 
+        "UnusedBytes": 29622272
+      }
+    }, 
+    "Type 8": {
+      "Flags": ["DEVICE_LOCAL"]
+    }
+  }, 
+  "Heap 1": {
+    "Size": 8545587200, 
+    "Flags": [], 
+    "Stats": {
+      "Blocks": 1, 
+      "Allocations": 4, 
+      "UnusedRanges": 1, 
+      "UsedBytes": 1024, 
+      "UnusedBytes": 33553408, 
+      "AllocationSize": {"Min": 256, "Avg": 256, "Max": 256}
+    }, 
+    "Type 0": {
+      "Flags": []
+    }, 
+    "Type 1": {
+      "Flags": []
+    }, 
+    "Type 2": {
+      "Flags": []
+    }, 
+    "Type 3": {
+      "Flags": []
+    }, 
+    "Type 4": {
+      "Flags": []
+    }, 
+    "Type 5": {
+      "Flags": []
+    }, 
+    "Type 6": {
+      "Flags": []
+    }, 
+    "Type 9": {
+      "Flags": ["HOST_VISIBLE", "HOST_COHERENT"], 
+      "Stats": {
+        "Blocks": 1, 
+        "Allocations": 4, 
+        "UnusedRanges": 1, 
+        "UsedBytes": 1024, 
+        "UnusedBytes": 33553408, 
+        "AllocationSize": {"Min": 256, "Avg": 256, "Max": 256}
+      }
+    }, 
+    "Type 10": {
+      "Flags": ["HOST_VISIBLE", "HOST_COHERENT", "HOST_CACHED"]
+    }
+  }, 
+  "DefaultPools": {
+    "Type 7": {
+      "PreferredBlockSize": 268435456, 
+      "Blocks": {
+        "0": {
+          "TotalBytes": 33554432, 
+          "UnusedBytes": 29622272, 
+          "Allocations": 1, 
+          "UnusedRanges": 1, 
+          "Suballocations": [
+            {"Offset": 0, "Type": "IMAGE_OPTIMAL", "Size": 3932160, "CreationFrameIndex": 0, "LastUseFrameIndex": 0, "Usage": 33}, 
+            {"Offset": 3932160, "Type": "FREE", "Size": 29622272}
+          ]
+        }
+      }
+    }, 
+    "Type 9": {
+      "PreferredBlockSize": 268435456, 
+      "Blocks": {
+        "0": {
+          "TotalBytes": 33554432, 
+          "UnusedBytes": 33553408, 
+          "Allocations": 4, 
+          "UnusedRanges": 1, 
+          "Suballocations": [
+            {"Offset": 0, "Type": "BUFFER", "Size": 256, "CreationFrameIndex": 0, "LastUseFrameIndex": 0, "Usage": 16}, 
+            {"Offset": 256, "Type": "BUFFER", "Size": 256, "CreationFrameIndex": 0, "LastUseFrameIndex": 0, "Usage": 16}, 
+            {"Offset": 512, "Type": "BUFFER", "Size": 256, "CreationFrameIndex": 0, "LastUseFrameIndex": 0, "Usage": 16}, 
+            {"Offset": 768, "Type": "BUFFER", "Size": 256, "CreationFrameIndex": 0, "LastUseFrameIndex": 0, "Usage": 16}, 
+            {"Offset": 1024, "Type": "FREE", "Size": 33553408}
+          ]
+        }
+      }
+    }
+  }
+}
