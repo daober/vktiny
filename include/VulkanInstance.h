@@ -17,7 +17,7 @@ namespace vkbase {
             uint32_t glfwExtensionCount = 0;
             const char** glfwExtensions;
 
-            glfwExtensions = glfwGetRequiredInstanceExtensions( &glfwExtensionCount );
+            //glfwExtensions = glfwGetRequiredInstanceExtensions( &glfwExtensionCount );
 
             VkApplicationInfo appInfo = {};
             appInfo.apiVersion = VK_API_VERSION_1_1;
@@ -57,7 +57,7 @@ namespace vkbase {
 
             uint32_t glfwExtensionCount = 0;
             const char** glfwExtensions;
-            glfwExtensions = glfwGetRequiredInstanceExtensions( &glfwExtensionCount );
+            //glfwExtensions = glfwGetRequiredInstanceExtensions( &glfwExtensionCount );
             // vector( pointer_to_first_element, pointer_to_first_element + (size_in_bytes_of_the_whole_array / size_of_one_element) )
             std::vector<const char*> extensions( glfwExtensions, glfwExtensions + glfwExtensionCount );
 

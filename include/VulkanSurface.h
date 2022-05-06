@@ -4,30 +4,37 @@
 #include "imgui/imgui.h"
 
 
-void mouse_pos_callback( GLFWwindow* window, double xpos, double ypos );
-void mouse_button_callback( GLFWwindow* window, int button, int action, int mods );
-void framebufferResizeCallback( GLFWwindow* window, int width, int height );
+//void mouse_pos_callback( GLFWwindow* window, double xpos, double ypos );
+//void mouse_button_callback( GLFWwindow* window, int button, int action, int mods );
+//void framebufferResizeCallback( GLFWwindow* window, int width, int height );
 
+#if defined(VK_USE_PLATFORM_ANDROID_KHR)
+#endif
+
+//#if defined(VK_USE_PLATFORM_WIN32_KHR)
 
 namespace vkbase {
 
 struct VulkanSurface {
-        GLFWwindow* window;
+        //GLFWwindow* window;
         VkSurfaceKHR surface;
 		VkInstance* inst;
+
 
         void createSurface( VkInstance* instance ) {
 
 			inst = instance;
 
-            if ( glfwCreateWindowSurface( *inst, window, nullptr, &surface ) != VK_SUCCESS ) {
+            VkWin32SurfaceCreateInfoKHR surfaceCreateInfo = {};
+
+            /*if ( glfwCreateWindowSurface( *inst, window, nullptr, &surface ) != VK_SUCCESS ) {
                 throw std::runtime_error( "failed to create window surface" );
-            }
+            }*/
         }
 
         void initWindow( ) {
 
-            glfwInit( );
+            /*glfwInit( );
 
             glfwWindowHint( GLFW_CLIENT_API, GLFW_NO_API );
             glfwWindowHint( GLFW_RESIZABLE, GLFW_FALSE );
@@ -38,7 +45,7 @@ struct VulkanSurface {
             glfwSetCursorPosCallback( window, mouse_pos_callback );
             //glfwSetMouseButtonCallback( window, mouse_button_callback );
 
-            glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_DISABLED );
+            glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_DISABLED );*/
         }
 
 		~VulkanSurface() {
@@ -49,3 +56,5 @@ struct VulkanSurface {
 
 
 }
+
+//#endif

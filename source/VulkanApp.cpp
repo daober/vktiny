@@ -82,13 +82,13 @@ void VulkanApp::renderLoop() {
 	transform_matrices.projection = glm::perspective(glm::radians(60.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 256.0f);
 	transform_matrices.projection[1][1] *= -1.0f;
 
-	while (!glfwWindowShouldClose(vulkan_surface->window)) {
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
+	//while (!glfwWindowShouldClose(vulkan_surface->window)) {
+	//	float currentFrame = glfwGetTime();
+	//	deltaTime = currentFrame - lastFrame;
+	//	lastFrame = currentFrame;
 
-		glfwPollEvents();
-		processInput(vulkan_surface->window);
+	//	glfwPollEvents();
+	//	processInput(vulkan_surface->window);
 
 		render();
 
@@ -113,7 +113,7 @@ void VulkanApp::renderLoop() {
 		//ImGui::Render();
 
 		buildCommandBuffers();
-	}
+	//}
 	vkDeviceWaitIdle(global_device->logicalDevice);
 }
 
@@ -581,7 +581,7 @@ void VulkanApp::draw() {
 	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), draw_cmd_buffer);
 }*/
 
-void VulkanApp::processInput(GLFWwindow* window) {
+/*void VulkanApp::processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
@@ -599,7 +599,7 @@ void VulkanApp::processInput(GLFWwindow* window) {
 		global_camera->ProcessKeyboard(RIGHT, deltaTime);
 	}
 		
-}
+}*/
 
 
 void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos) {

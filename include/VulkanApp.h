@@ -44,7 +44,7 @@ public:
 	//void prepareUI();
 	//void renderUIDrawData(VkCommandBuffer draw_cmd_buffer);
 
-	void processInput(GLFWwindow* window);
+	//void processInput(GLFWwindow* window);
 
 
 private:

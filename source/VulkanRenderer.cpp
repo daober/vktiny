@@ -239,10 +239,10 @@ void VulkanRenderer::createPipelineCache( ) {
 void VulkanRenderer::recreateSwapchain( ) {
 
 	int width, height;
-	glfwGetFramebufferSize(vulkan_surface->window, &width, &height);
+	//glfwGetFramebufferSize(vulkan_surface->window, &width, &height);
 	while (width == 0 || height == 0) {
-		glfwGetFramebufferSize(vulkan_surface->window, &width, &height);
-		glfwWaitEvents();
+		//glfwGetFramebufferSize(vulkan_surface->window, &width, &height);
+		//glfwWaitEvents();
 	}
 
 	vkDeviceWaitIdle(global_device->logicalDevice);
@@ -250,7 +250,7 @@ void VulkanRenderer::recreateSwapchain( ) {
 	cleanupSwapchain();
 	createImageViews();
 	
-	vulkan_swapchain = new vkbase::VulkanSwapchain(global_device->logicalDevice, vulkan_surface->window);
+	//vulkan_swapchain = new vkbase::VulkanSwapchain(global_device->logicalDevice, vulkan_surface->window);
 	vulkan_swapchain->createSwapchain(global_device->physicalDevice, vulkan_surface->surface);
 
 	createCommandPool();
@@ -431,8 +431,8 @@ void VulkanRenderer::cleanup( ) {
         DestroyDebugUtilsMessengerEXT( vulkan_instance->instance, debug_messenger, nullptr );
     }
 
-	glfwDestroyWindow(vulkan_surface->window);
-	glfwTerminate();
+	//glfwDestroyWindow(vulkan_surface->window);
+	//glfwTerminate();
 	delete vulkan_surface;
 
 	delete vulkan_instance;
@@ -456,7 +456,7 @@ void VulkanRenderer::prepare() {
 
 	global_allocator = new vkbase::VulkanAllocator(global_device->physicalDevice, global_device->logicalDevice );
 
-	vulkan_swapchain = new vkbase::VulkanSwapchain(global_device->logicalDevice, vulkan_surface->window);
+	//vulkan_swapchain = new vkbase::VulkanSwapchain(global_device->logicalDevice, vulkan_surface->window);
 	vulkan_swapchain->createSwapchain(global_device->physicalDevice, vulkan_surface->surface);
 
 	createCommandPool();
@@ -504,7 +504,7 @@ void VulkanRenderer::setupDebugMessenger( ) {
     }
 }
 
-void framebufferResizeCallback( GLFWwindow* window, int width, int height ) {
+/*void framebufferResizeCallback( GLFWwindow* window, int width, int height ) {
     auto app = reinterpret_cast< VulkanRenderer* >(glfwGetWindowUserPointer( window ));
     app->framebuffer_resized = true;
-}
+}*/

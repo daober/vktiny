@@ -10,16 +10,16 @@ namespace vkbase {
 
         VkSwapchainKHR swapchain;
         VkDevice device;
-        GLFWwindow* window;
+        //GLFWwindow* window;
         std::vector<VkImage> swapchainImages;
         VkFormat swapchainImageFormat;
         VkExtent2D swapchainExtent;
 		uint32_t imgui_image_count;
 
-        VulkanSwapchain( VkDevice logical_device, GLFWwindow* win ) {
-            device = logical_device;
-            window = win;
-        }
+        //VulkanSwapchain( VkDevice logical_device, GLFWwindow* win ) {
+          //  device = logical_device;
+            //window = win;
+        //}
 
 
         ~VulkanSwapchain( ) {
@@ -146,7 +146,7 @@ namespace vkbase {
             } else {
                 int width, height;
 
-                glfwGetFramebufferSize( window, &width, &height );
+                //glfwGetFramebufferSize( window, &width, &height );
 
                 VkExtent2D actualExtent = { WIDTH, HEIGHT };
 
