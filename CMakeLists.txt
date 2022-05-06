@@ -8,8 +8,6 @@ include_directories(external)
 include_directories(external/glm-0.9.9.1/glm)
 include_directories(external/gli-master/gli)
 
-add_subdirectory(external/glfw-3.2.1)
-
 find_package(Vulkan REQUIRED)
 
 set(
@@ -46,21 +44,19 @@ set(
   external/imgui/imgui_draw.cpp 
   external/imgui/imgui_internal.h 
   external/imgui/imgui_widgets.cpp 
-  external/imgui/imgui_impl_glfw.h 
-  external/imgui/imgui_impl_glfw.cpp 
   external/imgui/imgui_impl_vulkan.h 
   external/imgui/imgui_impl_vulkan.cpp
 )
 
 IF (WIN32 OR UNIX)
-include_directories(${GLFW_INCLUDE_DIR} ${Vulkan_INCLUDE_DIR})
+include_directories(${Vulkan_INCLUDE_DIR})
 include_directories(external/ktx)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 set(KTX_LIB ${CMAKE_CURRENT_SOURCE_DIR}/libs/ktx/ktx.lib)
 
-target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES} ${Vulkan_LIBRARIES} ${KTX_LIB})
+target_link_libraries(${PROJECT_NAME} ${Vulkan_LIBRARIES} ${KTX_LIB})
 ELSE()
 ENDIF()
 
