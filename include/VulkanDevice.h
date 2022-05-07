@@ -18,8 +18,11 @@ namespace vkbase {
 		VkPhysicalDeviceMemoryProperties memoryProps;
         VkQueue graphicsQueue;
         VkQueue presentQueue;
-
+		std::vector<VkQueueFamilyProperties> queueFamilyProperties;
+		std::vector<std::string> supportedExtensions;
+		QueueFamilyIndices queueFamilyIndices;
 		VkCommandPool command_pool;
+		std::vector<VkDeviceQueueCreateInfo> queueCreateInfos{};
 
         //VulkanDevice(VkPhysicalDevice physicalDevice){
           //  this->physicalDevice = physicalDevice;
@@ -54,7 +57,7 @@ namespace vkbase {
 
         }
 
-        void pickPhysicalDevice(VkInstance instance, VkSurfaceKHR surface){
+        void pickPhysicalDevice(VkInstance instance){
             //get physical device
             uint32_t physicalDeviceCount = 0;
 
@@ -70,10 +73,10 @@ namespace vkbase {
             }
 
             for ( const VkPhysicalDevice& dev : physicalDevices ) {
-                if ( isDeviceSuitable( dev, surface ) ) {
+                //if ( isDeviceSuitable( dev ) ) {
                     physicalDevice = dev;
                     break; //take the first suitable device (usually the dedicated gpu)
-                }
+                //}
             }
 
             if ( physicalDevice == VK_NULL_HANDLE ) {
@@ -96,21 +99,50 @@ namespace vkbase {
 			return score;
 		}
 
-        void createLogicalDevice( VkSurfaceKHR surface ){
-            QueueFamilyIndices indices = findQueueFamilies( physicalDevice, surface );
+        void createLogicalDevice(){
 
-            std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-            std::set<uint32_t> uniqueQueueFamilies = { indices.graphicsFamily, indices.presentFamily };
+			vkGetPhysicalDeviceFeatures(physicalDevice, &features);
+			vkGetPhysicalDeviceProperties(physicalDevice, &properties);
+			vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProps);
 
-            float queuePriority = 1.0f;
-            for ( uint32_t queueFamily : uniqueQueueFamilies ) {
-                VkDeviceQueueCreateInfo queueCreateInfo = {};
-                queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-                queueCreateInfo.queueFamilyIndex = queueFamily;
-                queueCreateInfo.queueCount = 1;
-                queueCreateInfo.pQueuePriorities = &queuePriority;
-                queueCreateInfos.emplace_back( queueCreateInfo );
-            }
+            //QueueFamilyIndices indices = findQueueFamilies( physicalDevice );
+
+			uint32_t queueFamilyCount;
+			vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
+			assert(queueFamilyCount > 0);
+			queueFamilyProperties.resize(queueFamilyCount);
+			vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilyProperties.data());
+
+
+			// Get list of supported extensions
+			uint32_t extCount = 0;
+			vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extCount, nullptr);
+			if (extCount > 0)
+			{
+				std::vector<VkExtensionProperties> extensions(extCount);
+				if (vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extCount, &extensions.front()) == VK_SUCCESS)
+				{
+					for (auto ext : extensions)
+					{
+						supportedExtensions.push_back(ext.extensionName);
+					}
+				}
+			}
+
+			const float defaultQueuePriority(0.0f);
+
+			// Graphics queue
+			queueFamilyIndices.graphicsFamily = getQueueFamilyIndex(VK_QUEUE_GRAPHICS_BIT);
+			queueFamilyIndices.presentFamily = 0;
+			queueFamilyIndices.transferFamily = 0;
+			VkDeviceQueueCreateInfo queueInfo{};
+			queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+			queueInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily;
+			queueInfo.queueCount = 1;
+			queueInfo.pQueuePriorities = &defaultQueuePriority;
+			queueCreateInfos.push_back(queueInfo);
+
+
 
 
             VkPhysicalDeviceFeatures deviceFeatures = {};
@@ -138,11 +170,53 @@ namespace vkbase {
                 throw std::runtime_error( "failed to create logical vkdevice" );
             }
 
-            vkGetDeviceQueue( logicalDevice, indices.graphicsFamily, 0, &graphicsQueue );
-            vkGetDeviceQueue( logicalDevice, indices.presentFamily, 0, &presentQueue );
+            vkGetDeviceQueue( logicalDevice, queueFamilyIndices.graphicsFamily, 0, &graphicsQueue );
+            vkGetDeviceQueue( logicalDevice, queueFamilyIndices.presentFamily, 0, &presentQueue );
 
-			command_pool = createCommandPool(indices.graphicsFamily);
+			command_pool = createCommandPool(queueFamilyIndices.graphicsFamily);
         }
+
+
+		uint32_t VulkanDevice::getQueueFamilyIndex(VkQueueFlagBits queueFlags) const
+		{
+			// Dedicated queue for compute
+			// Try to find a queue family index that supports compute but not graphics
+			if (queueFlags & VK_QUEUE_COMPUTE_BIT)
+			{
+				for (uint32_t i = 0; i < static_cast<uint32_t>(queueFamilyProperties.size()); i++)
+				{
+					if ((queueFamilyProperties[i].queueFlags & queueFlags) && ((queueFamilyProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) == 0))
+					{
+						return i;
+					}
+				}
+			}
+
+			// Dedicated queue for transfer
+			// Try to find a queue family index that supports transfer but not graphics and compute
+			if (queueFlags & VK_QUEUE_TRANSFER_BIT)
+			{
+				for (uint32_t i = 0; i < static_cast<uint32_t>(queueFamilyProperties.size()); i++)
+				{
+					if ((queueFamilyProperties[i].queueFlags & queueFlags) && ((queueFamilyProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) == 0) && ((queueFamilyProperties[i].queueFlags & VK_QUEUE_COMPUTE_BIT) == 0))
+					{
+						return i;
+					}
+				}
+			}
+
+			// For other queue types or if no separate compute queue is present, return the first one to support the requested flags
+			for (uint32_t i = 0; i < static_cast<uint32_t>(queueFamilyProperties.size()); i++)
+			{
+				if (queueFamilyProperties[i].queueFlags & queueFlags)
+				{
+					return i;
+				}
+			}
+
+			throw std::runtime_error("Could not find a matching queue family index");
+		}
+
 
 		VkCommandPool createCommandPool(uint32_t queueFamilyIndex, VkCommandPoolCreateFlags createFlags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT)
 		{
@@ -159,7 +233,7 @@ namespace vkbase {
 
 
         bool isDeviceSuitable( VkPhysicalDevice device, VkSurfaceKHR surface ) {
-            QueueFamilyIndices indices = findQueueFamilies( device, surface );
+            QueueFamilyIndices indices = findQueueFamilies( device, surface);
 
             bool extensionsSupported = checkDeviceExtensionSupport( device );
 

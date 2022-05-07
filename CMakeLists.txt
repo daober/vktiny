@@ -32,7 +32,8 @@ set(
   include/VulkanGlobals.h 
   include/VulkanAllocator.h
   include/VulkanSwapchain.h 
-  include/VulkanFramebuffer.h 
+  include/VulkanFramebuffer.h
+  include/keycodes.h
   include/VulkanTools.h 
   include/VulkanTexture.h 
   include/GLTFModel.h

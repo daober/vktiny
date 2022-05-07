@@ -10,16 +10,14 @@ namespace vkbase {
 
         VkSwapchainKHR swapchain;
         VkDevice device;
-        //GLFWwindow* window;
         std::vector<VkImage> swapchainImages;
         VkFormat swapchainImageFormat;
         VkExtent2D swapchainExtent;
 		uint32_t imgui_image_count;
 
-        //VulkanSwapchain( VkDevice logical_device, GLFWwindow* win ) {
-          //  device = logical_device;
-            //window = win;
-        //}
+        VulkanSwapchain(VkDevice dev) {
+            device = dev;
+        }
 
 
         ~VulkanSwapchain( ) {
@@ -27,7 +25,7 @@ namespace vkbase {
         }
 
 
-        void createSwapchain( VkPhysicalDevice physicalDevice, VkSurfaceKHR surface  ) {
+        void createSwapchain( VkPhysicalDevice physicalDevice, VkInstance inst, VkSurfaceKHR surface ) {
 
             SwapChainSupportDetails swapChainSupport = querySwapChainSupport( physicalDevice, surface );
 

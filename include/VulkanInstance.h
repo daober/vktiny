@@ -19,10 +19,6 @@ namespace vkbase {
 
         void createInstance(){
 
-            //uint32_t glfwExtensionCount = 0;
-            //const char** glfwExtensions;
-
-            //glfwExtensions = glfwGetRequiredInstanceExtensions( &glfwExtensionCount );
 #if defined(_WIN32)
             instanceExtensions.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
 #elif defined (VK_USE_PLATFORM_ANDROID_KHR)
@@ -45,7 +41,6 @@ namespace vkbase {
 
             getInstanceExtensions();
 
-            //auto extensions = getRequiredExtensions( );
             if (enableValidationLayers) {
                 instanceExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
             }
@@ -69,22 +64,6 @@ namespace vkbase {
             }
 
         }
-
-
-        /*std::vector<const char*> getRequiredExtensions( ) {
-
-            uint32_t glfwExtensionCount = 0;
-            const char** glfwExtensions;
-            //glfwExtensions = glfwGetRequiredInstanceExtensions( &glfwExtensionCount );
-            // vector( pointer_to_first_element, pointer_to_first_element + (size_in_bytes_of_the_whole_array / size_of_one_element) )
-            std::vector<const char*> extensions( glfwExtensions, glfwExtensions + glfwExtensionCount );
-
-            if ( enableValidationLayers ) {
-                extensions.emplace_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
-            }
-
-            return extensions;
-        }*/
 
         void getInstanceExtensions() {
 
@@ -111,7 +90,6 @@ namespace vkbase {
             }
 
         }
-
 
     };
 

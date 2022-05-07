@@ -35,7 +35,6 @@ const int WIDTH = 1680;
 const int HEIGHT = 1050;
 
 
-
 struct SwapChainSupportDetails {
     VkSurfaceCapabilitiesKHR surfaceCapabilites;
     std::vector<VkSurfaceFormatKHR> formats;
@@ -129,9 +128,10 @@ inline SwapChainSupportDetails querySwapChainSupport( VkPhysicalDevice device, V
 struct QueueFamilyIndices {
     uint32_t graphicsFamily = -1;
     uint32_t presentFamily = -1;
+	uint32_t transferFamily = -1;
 
     bool isComplete( ) {
-        if ( graphicsFamily >= 0 && presentFamily >= 0 ) {
+        if ( graphicsFamily >= 0 && presentFamily && transferFamily >= 0 ) {
             return true;
         } else {
 return false;
@@ -172,6 +172,38 @@ inline QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device, VkSurfaceKH
 	return indices;
 }
 
+
+inline QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
+
+	QueueFamilyIndices indices;
+
+	uint32_t queueFamilyCount = 0;
+	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+	std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+	int i = 0;
+	for (const auto& queueFamily : queueFamilies) {
+		if (queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+			indices.graphicsFamily = i;
+		}
+
+		VkBool32 presentSupport = false;
+
+		if (queueFamily.queueCount > 0 && presentSupport) {
+			indices.presentFamily = i;
+		}
+
+		if (indices.isComplete()) {
+			break;
+		}
+
+		i++;
+	}
+
+	return indices;
+}
 
 
 

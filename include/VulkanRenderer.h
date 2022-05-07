@@ -10,6 +10,22 @@
 
 class VulkanRenderer {
 
+    // OS specific
+#if defined(_WIN32)
+    HWND window;
+    HINSTANCE windowInstance;
+#elif defined(VK_USE_PLATFORM_ANDROID_KHR)
+    // true if application has focused, false if moved to background
+    bool focused = false;
+    struct TouchPos {
+        int32_t x;
+        int32_t y;
+    } touchPos;
+    bool touchDown = false;
+    double touchTimer = 0.0;
+    int64_t lastTapTime = 0;
+#endif
+
 public:
 
     VulkanRenderer( );
@@ -42,7 +58,15 @@ private:
 
     void createDepthStencil( );
 
-
+#if defined(_WIN32)
+    void setupConsole(std::string title);
+    void setupDPIAwareness();
+    HWND setupWindow(HINSTANCE hinstance, WNDPROC wndproc);
+    void handleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+#elif defined(VK_USE_PLATFORM_ANDROID_KHR)
+    static int32_t handleAppInput(struct android_app* app, AInputEvent* event);
+    static void handleAppCommand(android_app* app, int32_t cmd);
+#endif
 
 private:
 
@@ -60,6 +84,17 @@ private:
 
 	virtual void preparePipelines() = 0;
 
+    bool prepared = false;
+    bool resized = false;
+    uint32_t width = 1280;
+    uint32_t height = 720;
+    // Defines a frame rate independent timer value clamped from -1.0...1.0
+// For use in animations, rotations, etc.
+    float timer = 0.0f;
+    // Multiplier for speeding up (or slowing down) the global timer
+    float timerSpeed = 0.25f;
+    bool paused = false;
+    glm::vec2 mousePos;
 
 protected:
 

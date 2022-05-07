@@ -13,23 +13,52 @@
 
 //#if defined(VK_USE_PLATFORM_WIN32_KHR)
 
+
+
+
 namespace vkbase {
 
 struct VulkanSurface {
-        //GLFWwindow* window;
-        VkSurfaceKHR surface;
-		VkInstance* inst;
+        VkSurfaceKHR surface = nullptr;
+		VkInstance inst = nullptr;
+
+        VulkanSurface(VkInstance instance){
+            inst = instance;
+            surface = nullptr;
+        }
 
 
-        void createSurface( VkInstance* instance ) {
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
+        void initSurface(void* platformHandle, void* platformWindow)
+#elif defined(VK_USE_PLATFORM_ANDROID_KHR)
+        void initSurface(ANativeWindow* window)
+#endif
+        {
+            VkResult err = VK_SUCCESS;
 
-			inst = instance;
-
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
             VkWin32SurfaceCreateInfoKHR surfaceCreateInfo = {};
+            surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+            surfaceCreateInfo.hinstance = (HINSTANCE)platformHandle;
+            surfaceCreateInfo.hwnd = (HWND)platformWindow;
 
-            /*if ( glfwCreateWindowSurface( *inst, window, nullptr, &surface ) != VK_SUCCESS ) {
-                throw std::runtime_error( "failed to create window surface" );
-            }*/
+            err = vkCreateWin32SurfaceKHR(inst, &surfaceCreateInfo, nullptr, &surface);
+
+#elif defined(VK_USE_PLATFORM_ANDROID_KHR)
+            VkAndroidSurfaceCreateInfoKHR surfaceCreateInfo = {};
+            surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR;
+            surfaceCreateInfo.window = window;
+
+            err = vkCreateAndroidSurfaceKHR(instance, &surfaceCreateInfo, NULL, &surface);
+#endif
+
+            if (err != VK_SUCCESS) {
+                throw std::runtime_error("Could not create surface!");
+            }
+
+
+
+
         }
 
         void initWindow( ) {
@@ -49,7 +78,7 @@ struct VulkanSurface {
         }
 
 		~VulkanSurface() {
-			vkDestroySurfaceKHR(*inst, surface, nullptr);
+			vkDestroySurfaceKHR(inst, surface, nullptr);
 		}
 
     };
