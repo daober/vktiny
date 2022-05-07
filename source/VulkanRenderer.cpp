@@ -18,8 +18,8 @@ VulkanRenderer::~VulkanRenderer( ) {
 
 
 void VulkanRenderer::initVulkan( ) {
-	vulkan_surface = new vkbase::VulkanSurface();
-	vulkan_surface->initWindow();
+	//vulkan_surface = new vkbase::VulkanSurface();
+	//vulkan_surface->initWindow();
 
 	vulkan_instance = new vkbase::VulkanInstance();
 	vulkan_instance->createInstance();
@@ -443,14 +443,15 @@ void VulkanRenderer::prepare() {
 
 	initVulkan();
 
-	vulkan_surface->createSurface(&vulkan_instance->instance);
+	//vulkan_surface->createSurface(&vulkan_instance->instance);
 	global_device = new vkbase::VulkanDevice();
 	global_device->pickPhysicalDevice(vulkan_instance->instance, vulkan_surface->surface);
-	global_device->createLogicalDevice(vulkan_surface->surface);
 
-	vkGetPhysicalDeviceFeatures(global_device->physicalDevice, &global_device->features);
-	vkGetPhysicalDeviceProperties(global_device->physicalDevice, &global_device->properties);
-	vkGetPhysicalDeviceMemoryProperties(global_device->physicalDevice, &global_device->memoryProps);
+    vkGetPhysicalDeviceFeatures(global_device->physicalDevice, &global_device->features);
+    vkGetPhysicalDeviceProperties(global_device->physicalDevice, &global_device->properties);
+    vkGetPhysicalDeviceMemoryProperties(global_device->physicalDevice, &global_device->memoryProps);
+
+    global_device->createLogicalDevice(vulkan_surface->surface);
 
 	vk_device_info.create_basic_infos(global_device);
 

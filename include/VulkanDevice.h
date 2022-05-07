@@ -21,9 +21,9 @@ namespace vkbase {
 
 		VkCommandPool command_pool;
 
-        VulkanDevice(VkPhysicalDevice physicalDevice){
-            this->physicalDevice = physicalDevice;
-        }
+        //VulkanDevice(VkPhysicalDevice physicalDevice){
+          //  this->physicalDevice = physicalDevice;
+        //}
 
 		VkCommandPool createCommandPool() {
 			VkCommandPool cmdPool;

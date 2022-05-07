@@ -602,7 +602,7 @@ void VulkanApp::draw() {
 }*/
 
 
-void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos) {
+/*void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos) {
 
 		if (firstMouse) {
 			lastX = xpos;
@@ -618,4 +618,4 @@ void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos) {
 		lastY = ypos;
 
 		global_camera->ProcessMouseMovement(xoffset, yoffset);
-}
+}*/
